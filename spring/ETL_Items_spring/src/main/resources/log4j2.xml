@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+
+    <!-- Appender, Layout 설정 -->
+    <Appenders>
+        <!-- Console Appender: 로그를 콘솔(SYSTEM_OUT)로 출력 -->
+        <Console name="console" target="SYSTEM_OUT">
+            <!-- 기본 패턴 레이아웃 (별도의 패턴 지정 없음) -->
+            <PatternLayout/>
+        </Console>
+
+        <!-- File Appender: 로그를 파일에 기록 -->
+        <!-- fileName: 로그 파일 경로 (./logs/file/sample.log) -->
+        <!-- append: false로 설정되어 기존 파일을 덮어씁니다. -->
+        <File name="file" fileName="./logs/file/sample.log" append="false">
+            <!-- 로그 출력 패턴 지정 -->
+            <!-- %d: 날짜/시간, %p: 로그 레벨, %c: 로거 이름, %m: 메시지, %n: 줄 바꿈 -->
+            <PatternLayout pattern="%d %5p [%c] %m%n"/>
+        </File>
+    </Appenders>
+
+    <!-- Logger 설정 -->
+    <Loggers>
+        <!-- Logger 설정: com.zaxxer 패키지의 로그를 DEBUG 레벨로 출력 -->
+        <!-- additivity="false": 상위 로거 설정을 상속하지 않음 -->
+        <Logger name="com.zaxxer" level="DEBUG" additivity="false">
+            <!-- console Appender에 로그를 전달 -->
+            <AppenderRef ref="console"/>
+        </Logger>
+
+        <!-- Logger 설정: org.zerock 패키지의 로그를 TRACE 레벨로 출력 -->
+        <!-- additivity="false": 상위 로거 설정을 상속하지 않음 -->
+        <Logger name="org.zerock" level="TRACE" additivity="false">
+            <!-- console Appender에 로그를 전달 -->
+            <AppenderRef ref="console"/>
+        </Logger>
+
+        <!-- 루트 로거 설정: 모든 로거의 기본 설정 -->
+        <!-- 로그 레벨: INFO (INFO 이상의 로그만 출력) -->
+        <Root level="INFO">
+            <!-- console Appender에 로그를 전달 -->
+            <AppenderRef ref="console"/>
+        </Root>
+
+        <logger name="org.springframework.web.servlet.resource" level="DEBUG" />
+    </Loggers>
+
+</Configuration>

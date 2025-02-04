@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.etl_items.mappers.postgres.PostgresMapper">
+
+
+    <!-- 부모 테이블(TbOprGdsLVo)과 자식 테이블(TbGdsIcptInspLVo, TbGdsBzentyLVo)을 연결하는 resultMap -->
+    <resultMap id="TbOprGdsLVoResultMap" type="TbOprGdsLVo">
+        <!-- 부모 테이블의 컬럼 매핑 -->
+        <result property="mstId" column="mst_id"/>
+        <result property="mstDataId" column="mst_data_id"/>
+        <result property="mstUseYn" column="mst_use_yn"/>
+        <result property="regId" column="reg_id"/>
+        <result property="regDt" column="reg_dt"/>
+        <result property="modId" column="mod_id"/>
+        <result property="modDt" column="mod_dt"/>
+        <result property="inspInstCd" column="insp_inst_cd"/>
+        <result property="docNo" column="doc_no"/>
+        <result property="docCycl" column="doc_cycl"/>
+        <result property="inspInstNm" column="insp_inst_nm"/>
+        <result property="ntfctnRtrcnYn" column="ntfctn_rtrcn_yn"/>
+        <result property="rptTypeCd" column="rpt_type_cd"/>
+        <result property="rptTypeNm" column="rpt_type_nm"/>
+        <result property="prdctNm" column="prdct_nm"/>
+        <result property="prdctTypeNm" column="prdct_type_nm"/>
+        <result property="plorNm" column="plor_nm"/>
+        <result property="barcdNo" column="barcd_no"/>
+        <result property="mnftrYmd" column="mnftr_ymd"/>
+        <result property="rtlTermCn" column="rtl_term_cn"/>
+        <result property="pacUnitCn" column="pac_unit_cn"/>
+        <result property="safeCertNo" column="safe_cert_no"/>
+        <result property="prdctPrmsnNo" column="prdct_prmsn_no"/>
+        <result property="mnftrNo" column="mnftr_no"/>
+        <result property="rtrvlRsnCd" column="rtrvl_rsn_cd"/>
+        <result property="rtrvlRsnNm" column="rtrvl_rsn_nm"/>
+        <result property="rptInstNm" column="rpt_inst_nm"/>
+        <result property="rptPicNm" column="rpt_pic_nm"/>
+        <result property="rptPicTelno" column="rpt_pic_telno"/>
+        <result property="inspSeNm" column="insp_se_nm"/>
+        <result property="cltInstNm" column="clt_inst_nm"/>
+        <result property="cltYmd" column="clt_ymd"/>
+        <result property="rmrkCn" column="rmrk_cn"/>
+        <result property="rptYmd" column="rpt_ymd"/>
+        <result property="ntfctnDt" column="ntfctn_dt"/>
+        <result property="cmdBgngDdCn" column="cmd_bgng_dd_cn"/>
+        <result property="certNm" column="cert_nm"/>
+        <result property="certCdCn" column="cert_cd_cn"/>
+        <result property="stdGdsClsfCd" column="std_gds_clsf_cd"/>
+
+        <!-- 자식 테이블 1 (tb_gds_icpt_insp_l) 데이터를 참조 -->
+        <association property="icptInspData" javaType="TbGdsIcptInspLVo">
+            <result property="inspInstCd" column="insp_inst_cd"/>
+            <result property="docNo" column="doc_no"/>
+            <result property="docCycl" column="doc_cycl"/>
+            <result property="icptInspSn" column="icpt_insp_sn"/>
+            <result property="icptInspArtclCn" column="icpt_insp_artcl_cn"/>
+            <result property="icptInspSpcfctCn" column="icpt_insp_spcfct_cn"/>
+            <result property="icptInspRsltCn" column="icpt_insp_rslt_cn"/>
+        </association>
+
+        <!-- 자식 테이블 2 (tb_gds_bzenty_l) 데이터를 참조 -->
+        <association property="bzentyData" javaType="TbGdsBzentyLVo">
+            <result property="inspInstCd" column="insp_inst_cd"/>
+            <result property="docNo" column="doc_no"/>
+            <result property="docCycl" column="doc_cycl"/>
+            <result property="bzentySn" column="bzenty_sn"/>
+            <result property="bzentyTypeNm" column="bzenty_type_nm"/>
+            <result property="bzentyBrno" column="bzenty_brno"/>
+            <result property="bzentyNm" column="bzenty_nm"/>
+            <result property="bzentyTelno" column="bzenty_telno"/>
+            <result property="bzentyZip" column="bzenty_zip"/>
+            <result property="bzentyAddr" column="bzenty_addr"/>
+            <result property="bzentyDaddr" column="bzenty_daddr"/>
+        </association>
+    </resultMap>
+
+    <!-- 데이터 조회 쿼리 -->
+    <select id="getList" resultMap="TbOprGdsLVoResultMap">
+        SELECT
+        -- 부모 테이블(tb_opr_gds_l) 컬럼들
+        og.mst_id,
+        og.mst_data_id,
+        og.mst_use_yn,
+        og.reg_id,
+        og.reg_dt,
+        og.mod_id,
+        og.mod_dt,
+        og.insp_inst_cd,
+        og.doc_no,
+        og.doc_cycl,
+        og.insp_inst_nm,
+        og.ntfctn_rtrcn_yn,
+        og.rpt_type_cd,
+        og.rpt_type_nm,
+        og.prdct_nm,
+        og.prdct_type_nm,
+        og.plor_nm,
+        og.barcd_no,
+        og.mnftr_ymd,
+        og.rtl_term_cn,
+        og.pac_unit_cn,
+        og.safe_cert_no,
+        og.prdct_prmsn_no,
+        og.mnftr_no,
+        og.rtrvl_rsn_cd,
+        og.rtrvl_rsn_nm,
+        og.rpt_inst_nm,
+        og.rpt_pic_nm,
+        og.rpt_pic_telno,
+        og.insp_se_nm,
+        og.clt_inst_nm,
+        og.clt_ymd,
+        og.rmrk_cn,
+        og.rpt_ymd,
+        og.ntfctn_dt,
+        og.cmd_bgng_dd_cn,
+        og.cert_nm,
+        og.cert_cd_cn,
+        og.std_gds_clsf_cd,
+
+        -- 자식 테이블 1 (tb_gds_icpt_insp_l) 데이터
+        gi.insp_inst_cd AS insp_inst_cd,
+        gi.doc_no AS doc_no,
+        gi.doc_cycl AS doc_cycl,
+        gi.icpt_insp_sn,
+        gi.icpt_insp_artcl_cn,
+        gi.icpt_insp_spcfct_cn,
+        gi.icpt_insp_rslt_cn,
+
+        -- 자식 테이블 2 (tb_gds_bzenty_l) 데이터
+        gb.bzenty_sn,
+        gb.bzenty_type_nm,
+        gb.bzenty_brno,
+        gb.bzenty_nm,
+        gb.bzenty_telno,
+        gb.bzenty_zip,
+        gb.bzenty_addr,
+        gb.bzenty_daddr
+
+        FROM tb_opr_gds_l og
+
+
+        -- 자식 테이블 1 (tb_gds_icpt_insp_l)과 조인
+        LEFT JOIN tb_gds_icpt_insp_l gi
+        ON og.insp_inst_cd = gi.insp_inst_cd
+        AND og.doc_no = gi.doc_no
+
+        -- 자식 테이블 2 (tb_gds_bzenty_l)과 조인
+        LEFT JOIN tb_gds_bzenty_l gb
+        ON og.insp_inst_cd = gb.insp_inst_cd
+        AND og.doc_no = gb.doc_no
+
+        -- 정렬 조건 추가
+        ORDER BY og.doc_no DESC
+
+    </select>
+
+    <!-- 전체 항목 수 계산 -->
+    <select id="getTotalItems" resultType="long">
+        SELECT COUNT(*)
+        FROM tb_opr_gds_l og
+        LEFT JOIN tb_gds_bzenty_l gb ON og.insp_inst_cd = gb.insp_inst_cd AND og.doc_no = gb.doc_no
+        <where>
+            <if test="searchQuery != null and searchQuery.trim() != ''">
+                AND (og.prdct_nm LIKE CONCAT('%', #{searchQuery}, '%')
+                OR gb.bzenty_nm LIKE CONCAT('%', #{searchQuery}, '%'))
+            </if>
+        </where>
+    </select>
+
+    <!--조인 된 테이블로 검색 후 항목 계산-->
+    <select id="getPaginatedItems" resultMap="TbOprGdsLVoResultMap">
+        SELECT
+        og.mst_id,
+        og.mst_data_id,
+        og.mst_use_yn,
+        og.reg_id,
+        og.reg_dt,
+        og.mod_id,
+        og.mod_dt,
+        og.insp_inst_cd,
+        og.doc_no,
+        og.doc_cycl,
+        og.insp_inst_nm,
+        og.ntfctn_rtrcn_yn,
+        og.rpt_type_cd,
+        og.rpt_type_nm,
+        og.prdct_nm,
+        og.prdct_type_nm,
+        og.plor_nm,
+        og.barcd_no,
+        og.mnftr_ymd,
+        og.rtl_term_cn,
+        og.pac_unit_cn,
+        og.safe_cert_no,
+        og.prdct_prmsn_no,
+        og.mnftr_no,
+        og.rtrvl_rsn_cd,
+        og.rtrvl_rsn_nm,
+        og.rpt_inst_nm,
+        og.rpt_pic_nm,
+        og.rpt_pic_telno,
+        og.insp_se_nm,
+        og.clt_inst_nm,
+        og.clt_ymd,
+        og.rmrk_cn,
+        og.rpt_ymd,
+        og.ntfctn_dt,
+        og.cmd_bgng_dd_cn,
+        og.cert_nm,
+        og.cert_cd_cn,
+        og.std_gds_clsf_cd
+        FROM tb_opr_gds_l og
+        <where>
+            <if test="searchQuery != null and searchQuery.trim() != ''">
+                AND og.prdct_nm LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+        </where>
+        ORDER BY og.doc_no DESC
+        LIMIT #{size} OFFSET #{offset}
+
+    </select>
+
+<!--ETL-->
+    <!-- PostgreSQL에서 데이터 조회 -->
+    <select id="getPostgresData" resultMap="TbOprGdsLVoResultMap">
+        SELECT
+        mst_id, mst_data_id, insp_inst_cd, doc_cycl, doc_no,
+        prdct_nm, prdct_type_nm, mnftr_ymd, rpt_inst_nm, rpt_pic_nm,
+        img_url, created_at
+        FROM tb_opr_gds_l
+    </select>
+
+    <!-- PostgreSQL 데이터 삽입 쿼리 -->
+    <insert id="insertPostgresData" parameterType="ETLItemsVo">
+        INSERT INTO tb_opr_gds_l (mst_id, mst_data_id, insp_inst_cd, doc_no, prdct_nm, img_url, created_at)
+        VALUES (#{mstId}, #{mstDataId}, #{inspInstCd}, #{docNo}, #{prdctNm}, #{imgUrl}, CURRENT_TIMESTAMP)
+    </insert>
+
+
+    </mapper>
+
+

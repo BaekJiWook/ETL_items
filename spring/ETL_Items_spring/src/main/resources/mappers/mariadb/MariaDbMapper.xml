@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.etl_items.mappers.mariadb.MariaDbMapper">
+
+    <!-- 데이터 삭제 -->
+    <delete id="deleteAllData">
+        DELETE FROM etl_items;
+    </delete>
+
+    <!-- MariaDB에 데이터 삽입 -->
+    <insert id="insertMariaDBData">
+        INSERT INTO etl_items (
+        mst_id,
+        mst_data_id,
+        insp_inst_cd,
+        doc_cycl,
+        doc_no,
+        prdct_nm,
+        prdct_type_nm,
+        mnftr_ymd,
+        rpt_type_nm,
+        rpt_inst_nm,
+        rpt_pic_nm,
+        insp_se_nu,
+        insp_se_nm,
+        bzenty_type_nm,
+        bzenty_nm,
+        bzenty_telno,
+        bzenty_addr,
+        bzenty_daddr,
+        icpt_insp_artcl_cn,
+        icpt_insp_spcfct_cn,
+        icpt_insp_rslt_cn,
+        img_url,
+        created_at
+        )
+        VALUES (
+        #{mstId},
+        #{mstDataId},
+        #{inspInstCd},
+        #{docCycl},
+        #{docNo},
+        #{prdctNm},
+        #{prdctTypeNm},
+        #{mnftrYmd},
+        #{rptTypeNm},
+        #{rptInstNm},
+        #{rptPicNm},
+        CASE
+        WHEN #{rptTypeNm} = '검사합격' THEN 0
+        ELSE 1
+        END,
+        #{inspSeNm},
+        #{bzentyTypeNm},
+        #{bzentyNm},
+        #{bzentyTelno},
+        #{bzentyAddr},
+        #{bzentyDaddr},
+        #{icptInspArtclCn},
+        #{icptInspSpcfctCn},
+        #{icptInspRsltCn},
+        #{imgUrl},
+        CURRENT_TIMESTAMP
+        )
+    </insert>
+
+
+    <!-- MariaDB에서 데이터를 조회하는 쿼리 -->
+    <select id="getMariaDbData" resultType="ETLItemsVo">
+        SELECT * FROM etl_items
+        ORDER BY doc_no DESC
+    </select>
+
+    <!--위해상품 조회 -->
+    <select id="getDngMariaDbData" resultType="ETLItemsVo">
+        SELECT * FROM etl_items
+        WHERE insp_se_nu = 1
+        ORDER BY doc_no DESC
+    </select>
+    <!-- 일반상품 조회-->
+    <select id="getNormMariaDbData" resultType="ETLItemsVo">
+        SELECT * FROM etl_items
+        WHERE insp_se_nu = 0
+        ORDER BY doc_no DESC
+    </select>
+
+<!--  페이지네이션-->
+    <!-- 전체 항목 수 계산 -->
+    <select id="getTotalItems" resultType="long">
+        SELECT COUNT(*)
+        FROM etl_items
+        <where>
+            <if test="searchQuery != null and searchQuery.trim() != ''">
+                AND (prdct_nm LIKE CONCAT('%', #{searchQuery}, '%')
+                OR bzenty_nm LIKE CONCAT('%', #{searchQuery}, '%'))
+            </if>
+        </where>
+    </select>
+    <!-- MariaDB에서 데이터를 조회하는 쿼리 -->
+    <select id="getPaginatedItems" resultType="ETLItemsVo">
+        SELECT * FROM etl_items
+        <where>
+            <if test="searchQuery != null and searchQuery.trim() != ''">
+                AND prdct_nm LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+        </where>
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+<!-- 위해 항목 수 계산 -->
+    <select id="getDngItems" resultType="long">
+        SELECT COUNT(*)
+        FROM etl_items
+        WHERE insp_se_nu = 1
+        <where>
+            <if test="searchQuery != null and searchQuery.trim() != ''">
+                AND (prdct_nm LIKE CONCAT('%', #{searchQuery}, '%')
+                OR bzenty_nm LIKE CONCAT('%', #{searchQuery}, '%'))
+            </if>
+        </where>
+    </select>
+    <!--위해 데이터 조회하는 쿼리 -->
+    <select id="getPaginatedDngItems" resultType="ETLItemsVo">
+        SELECT * FROM etl_items
+        WHERE insp_se_nu = 1
+        <where>
+            <if test="searchQuery != null and searchQuery.trim() != ''">
+                AND prdct_nm LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+        </where>
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+    <!-- mst_data_id로 위해 데이터 조회 -->
+    <select id="findDngItemsById" resultType="ETLItemsVo">
+        SELECT *
+        FROM etl_items
+        WHERE insp_se_nu = 1
+        AND mst_data_id = #{id}
+    </select>
+
+
+<!--일반 항목 수 계산 -->
+    <select id="getNormItems" resultType="long">
+        SELECT COUNT(*)
+        FROM etl_items
+        WHERE insp_se_nu = 0
+        <where>
+            <if test="searchQuery != null and searchQuery.trim() != ''">
+                AND (prdct_nm LIKE CONCAT('%', #{searchQuery}, '%')
+                OR bzenty_nm LIKE CONCAT('%', #{searchQuery}, '%'))
+            </if>
+        </where>
+    </select>
+    <!--일반 데이터 조회하는 쿼리 -->
+    <select id="getPaginatedNormItems" resultType="ETLItemsVo">
+        SELECT * FROM etl_items
+        WHERE insp_se_nu = 0
+        <where>
+            <if test="searchQuery != null and searchQuery.trim() != ''">
+                AND prdct_nm LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+        </where>
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+    <!-- mst_data_id로 위해데이터 조회 -->
+    <select id="findNormItemsById" resultType="ETLItemsVo">
+        SELECT *
+        FROM etl_items
+        WHERE insp_se_nu = 0
+        and mst_data_id = #{id}
+    </select>
+
+<!--등록하기-->
+    <!-- 현재 최대 mst_data_id 가져오기 -->
+    <select id="getMaxMstDataId" resultType="long">
+        SELECT IFNULL(MAX(mst_data_id), 0) FROM etl_items
+    </select>
+
+    <!-- 현재 최대 doc_no 가져오기 -->
+    <select id="getMaxDocNo" resultType="long">
+        SELECT IFNULL(MAX(doc_no), 0) FROM etl_items
+    </select>
+
+    <!-- 데이터 삽입 -->
+    <insert id="insertEtlItem" parameterType="ETLItemsVo">
+        INSERT INTO etl_items (
+        mst_data_id,
+        doc_no,
+        prdct_nm,
+        prdct_type_nm,
+        insp_se_nu,
+        bzenty_nm,
+        bzenty_addr,
+        bzenty_daddr,
+        rpt_type_nm,
+        rpt_inst_nm,
+        rpt_pic_nm,
+        mst_id,
+        img_url
+        )
+        VALUES (
+        #{mstDataId},
+        #{docNo},
+        #{prdctNm},
+        #{prdctTypeNm},
+        #{inspSeNu},
+        #{bzentyNm},
+        #{bzentyAddr},
+        #{bzentyDaddr},
+        #{rptTypeNm},
+        #{rptInstNm},
+        #{rptPicNm},
+        CASE
+        WHEN #{inspSeNu} = 1 THEN 'dng_gds'
+        WHEN #{inspSeNu} = 0 THEN 'norm_gds'
+        ELSE NULL
+        END,
+        #{imgUrl}
+        )
+    </insert>
+
+    <!--업데이트-->
+    <update id="updateEtlItem" parameterType="ETLItemsVo">
+        UPDATE etl_items
+        SET
+        doc_no = COALESCE(#{etlItem.docNo}, doc_no),
+        prdct_nm = COALESCE(#{etlItem.prdctNm}, prdct_nm),
+        prdct_type_nm = COALESCE(#{etlItem.prdctTypeNm}, prdct_type_nm),
+        insp_se_nu = COALESCE(#{etlItem.inspSeNu}, insp_se_nu),
+        bzenty_nm = COALESCE(#{etlItem.bzentyNm}, bzenty_nm),
+        bzenty_addr = COALESCE(#{etlItem.bzentyAddr}, bzenty_addr),
+        bzenty_daddr = COALESCE(#{etlItem.bzentyDaddr}, bzenty_daddr),
+        rpt_type_nm = COALESCE(#{etlItem.rptTypeNm}, rpt_type_nm),
+        rpt_inst_nm = COALESCE(#{etlItem.rptInstNm}, rpt_inst_nm),
+        rpt_pic_nm = COALESCE(#{etlItem.rptPicNm}, rpt_pic_nm),
+        mst_id = CASE
+        WHEN #{etlItem.inspSeNu} = 1 THEN 'dng_gds'
+        WHEN #{etlItem.inspSeNu} = 0 THEN 'norm_gds'
+        ELSE mst_id
+        END,
+        img_url = COALESCE(#{etlItem.imgUrl}, img_url)
+        WHERE mst_data_id = #{mstDataId} AND #{mstDataId} IS NOT NULL
+    </update>
+
+    <select id="findById" resultType="ETLItemsVo">
+        SELECT *
+        FROM etl_items
+        WHERE mst_data_id = #{id}
+        LIMIT 1
+    </select>
+
+    <!-- 데이터 삭제하기-->
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM etl_items WHERE mst_data_id = #{id}
+    </delete>
+
+</mapper>
