@@ -14,12 +14,15 @@
         <!-- 최대 메모리 크기 -->
         <property name="maxInMemorySize" value="4096" />
         <!-- 디스크 임시 저장 경로 -->
-        <property name="uploadTempDir" value="file:C:/tmp" />
+<!--        <property name="uploadTempDir" value="file:C:/tmp" />-->
+        <property name="uploadTempDir" value="file:/tmp" />
     </bean>
 
     <!-- 정적 리소스 처리 -->
-    <mvc:resources mapping="/uploads/**" location="file:C:/tmp/uploads/" />
-
+<!--    <mvc:resources mapping="/uploads/**" location="file:C:/tmp/uploads/" />-->
+    <mvc:resources mapping="/uploads/**" location="file:/tmp/uploads/" />
     <!-- Spring MVC 기본 설정 -->
     <mvc:annotation-driven />
+
+
 </beans>

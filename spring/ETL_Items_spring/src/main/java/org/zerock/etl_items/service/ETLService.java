@@ -70,7 +70,6 @@ public class ETLService {
         return etlItemsVo;
     }
 
-
     // MariaDB의 데이터를 삭제하는 메서드
     public void deleteAllData() {
         mariaDbMapper.deleteAllData();  // MariaDbMapper의 deleteAllData 메서드 호출
@@ -178,7 +177,8 @@ public class ETLService {
         if (file != null && !file.isEmpty()) {
             // 고유한 파일 이름 생성
             String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            String uploadDir = "C:/tmp/uploads/";
+//            String uploadDir = "C:/tmp/uploads/";
+            String uploadDir = "/tmp/uploads/";
             Path filePath = Paths.get(uploadDir, fileName);
 
             // 디렉토리 생성 및 파일 저장
@@ -212,13 +212,15 @@ public class ETLService {
         if (file != null && !file.isEmpty()) {
             // 기존 파일 삭제 (올바른 파일 경로만 사용)
             if (existingItem.getImgUrl() != null && !existingItem.getImgUrl().startsWith("blob:")) {
-                Path oldFilePath = Paths.get("C:/tmp/uploads/", existingItem.getImgUrl().replace("/uploads/", ""));
+//                Path oldFilePath = Paths.get("C:/tmp/uploads/", existingItem.getImgUrl().replace("/uploads/", ""));
+                Path oldFilePath = Paths.get("/tmp/uploads/", existingItem.getImgUrl().replace("/uploads/", ""));
                 Files.deleteIfExists(oldFilePath);
             }
 
             // 새 파일 저장
             String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            String uploadDir = "C:/tmp/uploads/";
+//            String uploadDir = "C:/tmp/uploads/";
+            String uploadDir = "/tmp/uploads/";
             Path filePath = Paths.get(uploadDir, fileName);
             Files.createDirectories(filePath.getParent());
             Files.write(filePath, file.getBytes());
@@ -248,7 +250,8 @@ public class ETLService {
 
         // 기존 이미지 파일 삭제 (파일이 존재할 경우)
         if (existingItem.getImgUrl() != null && !existingItem.getImgUrl().startsWith("blob:")) {
-            Path filePath = Paths.get("C:/tmp/uploads/", existingItem.getImgUrl().replace("/uploads/", ""));
+//            Path filePath = Paths.get("C:/tmp/uploads/", existingItem.getImgUrl().replace("/uploads/", ""));
+            Path filePath = Paths.get("/tmp/uploads/", existingItem.getImgUrl().replace("/uploads/", ""));
             Files.deleteIfExists(filePath);
         }
 

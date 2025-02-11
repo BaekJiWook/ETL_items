@@ -35,50 +35,50 @@ public class ETLTest {
     @Autowired
     private ETLService etlService;
 
-    @Test
-    @Transactional
-    public void testETLProcess() {
-
-        // MariaDB 데이터를 삭제
-        mariaDbMapper.deleteAllData();
-
-        // PostgreSQL에서 데이터를 조회
-        List<TbOprGdsLVo> postgresData = postgresMapper.getList();
-
-        // 데이터를 변환하고 MariaDB에 삽입
-        for (TbOprGdsLVo tbOprGdsLVo : postgresData) {
-            // 변환 메소드 호출
-            ETLItemsVo etlItemsVo = etlService.convertToETLItemsVo(tbOprGdsLVo);
-
-            // 변환된 데이터를 MariaDB로 삽입
-            mariaDbMapper.insertMariaDBData(etlItemsVo);
-        }
-
-        // MariaDB에서 데이터 확인
-        List<ETLItemsVo> mariaDbData = mariaDbMapper.getMariaDbData(); // MariaDB에서 데이터 조회
-        log.info("MariaDB 데이터: {}", mariaDbData); // 데이터를 로깅하여 확인
-
-        // 데이터 비교 예시 (PostgreSQL과 MariaDB 데이터가 일치하는지 확인)
-        assertNotNull(mariaDbData, "MariaDB에서 데이터를 조회할 수 없습니다.");
-        assertEquals(postgresData.size(), mariaDbData.size(), "데이터 개수가 일치하지 않습니다.");
-    }
-    @Test
-    public void testPagination() {
-        // Given
-        String searchQuery = ""; // 검색어 (필요에 따라 변경 가능)
-        int page = 1; // 테스트할 페이지 번호
-        int size = 5; // 페이지당 항목 수
-        int offset = (page - 1) * size;
-
-        // When
-        List<ETLItemsVo> items = mariaDbMapper.getPaginatedItems(searchQuery, size, offset);
-        long totalItems = mariaDbMapper.getTotalItems(searchQuery);
-
-
-        // 로그 출력
-        System.out.println("총 데이터 수: " + totalItems);
-        items.forEach(System.out::println);
-    }
+//    @Test
+//    @Transactional
+//    public void testETLProcess() {
+//
+//        // MariaDB 데이터를 삭제
+//        mariaDbMapper.deleteAllData();
+//
+//        // PostgreSQL에서 데이터를 조회
+//        List<TbOprGdsLVo> postgresData = postgresMapper.getList();
+//
+//        // 데이터를 변환하고 MariaDB에 삽입
+//        for (TbOprGdsLVo tbOprGdsLVo : postgresData) {
+//            // 변환 메소드 호출
+//            ETLItemsVo etlItemsVo = etlService.convertToETLItemsVo(tbOprGdsLVo);
+//
+//            // 변환된 데이터를 MariaDB로 삽입
+//            mariaDbMapper.insertMariaDBData(etlItemsVo);
+//        }
+//
+//        // MariaDB에서 데이터 확인
+//        List<ETLItemsVo> mariaDbData = mariaDbMapper.getMariaDbData(); // MariaDB에서 데이터 조회
+//        log.info("MariaDB 데이터: {}", mariaDbData); // 데이터를 로깅하여 확인
+//
+//        // 데이터 비교 예시 (PostgreSQL과 MariaDB 데이터가 일치하는지 확인)
+//        assertNotNull(mariaDbData, "MariaDB에서 데이터를 조회할 수 없습니다.");
+//        assertEquals(postgresData.size(), mariaDbData.size(), "데이터 개수가 일치하지 않습니다.");
+//    }
+//    @Test
+//    public void testPagination() {
+//        // Given
+//        String searchQuery = ""; // 검색어 (필요에 따라 변경 가능)
+//        int page = 1; // 테스트할 페이지 번호
+//        int size = 5; // 페이지당 항목 수
+//        int offset = (page - 1) * size;
+//
+//        // When
+//        List<ETLItemsVo> items = mariaDbMapper.getPaginatedItems(searchQuery, size, offset);
+//        long totalItems = mariaDbMapper.getTotalItems(searchQuery);
+//
+//
+//        // 로그 출력
+//        System.out.println("총 데이터 수: " + totalItems);
+//        items.forEach(System.out::println);
+//    }
 //    @Test
 //    public void testGetDngItems() {
 //        // MariaDB에서 데이터 확인

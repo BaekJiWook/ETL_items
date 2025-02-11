@@ -14,7 +14,8 @@
 
     <!-- 데이터베이스: PostgreSQL DataSource 설정 -->
     <bean id="postgresDataSource" class="com.zaxxer.hikari.HikariDataSource">
-        <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/postgres"/>
+<!--        <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/postgres"/>-->
+        <property name="jdbcUrl" value="jdbc:postgresql://52.79.139.134:5432/postgres"/>
         <property name="username" value="postgres"/>
         <property name="password" value="postgre"/>
         <property name="driverClassName" value="org.postgresql.Driver"/>
@@ -22,7 +23,8 @@
 
     <!-- 데이터베이스: MariaDB DataSource 설정 -->
     <bean id="mariaDbDataSource" class="com.zaxxer.hikari.HikariDataSource">
-        <property name="jdbcUrl" value="jdbc:mariadb://localhost:3306/etl_db"/>
+<!--        <property name="jdbcUrl" value="jdbc:mariadb://localhost:3306/etl_db"/>-->
+        <property name="jdbcUrl" value="jdbc:mariadb://52.79.139.134:3306/etl_db"/>
         <property name="username" value="etldbuser"/>
         <property name="password" value="etldbuser"/>
         <property name="driverClassName" value="org.mariadb.jdbc.Driver"/>
@@ -59,8 +61,6 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="postgresDataSource"/>
     </bean>
-
-
 
 
 </beans>

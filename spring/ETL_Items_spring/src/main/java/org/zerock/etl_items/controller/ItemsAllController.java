@@ -21,7 +21,8 @@ import java.util.Map;
 @RestController
 @Log4j2
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:8081")
+//@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = {"http://52.79.139.134:8081", "http://localhost:8081"})
 @RequestMapping("/api") // /api 경로가 중복되지 않도록 조정
 public class ItemsAllController {
     private final PostgresService postgresService;
