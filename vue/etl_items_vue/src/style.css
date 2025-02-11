@@ -1,0 +1,46 @@
+/* Noto Sans KR */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
+/* 변수 선언 */
+:root {
+    --main-color-dark: #4B3C30;
+    --main-color-light: #D1B000;
+    --text-color-dark: #1e1e1e;
+    --text-color-mid: #666;
+    --text-color-light: #b3b3b3;
+    --text-color-green: #008000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: "Noto Sans KR", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    color: var(--text-color-dark);
+}
+
+/*하이퍼 링크 색깔 */
+a {
+    color: var(--text-color-dark);
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    padding: 15px;
+}
